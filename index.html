@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Générateur de QR Code</title>
+  <link rel="shortcut icon" href="images/qr-code.png">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrapper">
+    <h1>Générateur de QR Code</h1>
+    <div class="input-group">
+      <input type="text" id="linkInput" placeholder="Entrez votre lien ici" />
+      <button onclick="generateQRCode()"><i class="fas fa-qrcode"></i> Générer QR Code</button>
+    </div>
+    <div id="qrcode"></div>
+    <a id="downloadLink"><i class="fas fa-download"></i> Télécharger le QR Code</a>
+  </div>
+  <!--  Footer  -->
+  <footer class="footer">
+    <p>Développé avec ❤️ par Zahra CHOKRI</p>
+  </footer>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script>
+    function generateQRCode() {
+      const link = document.getElementById('linkInput').value;
+      const qrcodeContainer = document.getElementById('qrcode');
+      const downloadLink = document.getElementById('downloadLink');
+
+      // Clear previous QR code
+      qrcodeContainer.innerHTML = '';
+      downloadLink.style.display = 'none';
+
+      if (link.trim() === '') {
+        alert('Veuillez entrer un lien valide.');
+        return;
+      }
+
+      // Generate QR Code
+      qrcodeContainer.style.display = 'block'; // Affiche la div du QR code
+      const qrCode = new QRCode(qrcodeContainer, {
+        text: link,
+        width: 200,
+        height: 200
+      });
+
+      // Convert QR code to image for download
+      setTimeout(() => {
+        const qrCanvas = qrcodeContainer.querySelector('canvas');
+        if (qrCanvas) {
+          const qrDataURL = qrCanvas.toDataURL('image/png');
+          downloadLink.href = qrDataURL;
+          downloadLink.download = 'qrcode.png';
+          downloadLink.style.display = 'inline-flex'; // Assurez-vous d'afficher le lien
+        }
+      }, 500);
+    }
+  </script>
+</body>
+</html>
